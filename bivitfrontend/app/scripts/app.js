@@ -21,7 +21,7 @@ angular
   ])
 
   .controller('NavCtrl', function ($scope, $timeout, $mdSidenav, $mdUtil, $log, $route, $routeParams, $location) {
-    $scope.toggleLeft = buildToggler('left');
+    
 
     /** grabs the current loaction
       */
@@ -34,6 +34,10 @@ angular
      * report completion in console
      */
 
+    function navBack(pageID) {
+      $location.path( '/' + pageID );
+    }
+    
     function buildToggler(navID) {
       var debounceFn =  $mdUtil.debounce(function(){
             $mdSidenav(navID)
@@ -42,11 +46,16 @@ angular
                 $log.debug('toggle ' + navID + ' is done');
               });
           },300);
-
       return debounceFn;
     }
 
+    $scope.toggleLeft = buildToggler('left');
+    $scope.navBackUsers = navBack('users');
+    $scope.navBackArticles = navBack('articles');
+    $scope.navBackClassrooms = navBack('classrooms');
+    
   })
+
   .controller('LeftNavCtrl', function ($scope, $timeout, $mdSidenav, $log, $location, $route, $routeParams) {
     
     /** grabs the current loaction
@@ -104,22 +113,28 @@ angular
       .when('/', {
         title: 'Home',
         icon: 'menu',
+        navBarFunction: 'toggleLeft()',
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
       .when('/about', {
         title: 'About',
+        icon: 'menu',
+        navBarFunction: 'toggleLeft()',
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
       .when('/contact', {
         title: 'Contact',
+        icon: 'menu',
+        navBarFunction: 'toggleLeft()',
         templateUrl: 'views/contact.html',
         controller: 'ContactCtrl'
       })
       .when('/users', {
         title: 'Users',
         icon: 'menu',
+        navBarFunction: 'toggleLeft()',
         templateUrl: 'views/users.html',
         controller: 'UsersCtrl',
         resolve: {
@@ -129,6 +144,7 @@ angular
       .when('/classrooms', {
         title: 'Classrooms',
         icon: 'menu',
+        navBarFunction: 'toggleLeft()',
         templateUrl: 'views/classrooms.html',
         controller: 'ClassroomsCtrl',
         resolve: {
@@ -138,6 +154,7 @@ angular
       .when('/users/:userId', {
         title: 'user.name',
         icon: 'arrow_back',
+        navBarFunction: 'navBackUsers()',
         templateUrl: 'views/users/:userid.html',
         controller: 'UsersUseridCtrl',
         resolve: {
@@ -147,6 +164,7 @@ angular
       .when('/classrooms/:classroomId', {
         title: 'classroom.title',
         icon: 'arrow_back',
+        navBarFunction: 'navBackClassrooms()',
         templateUrl: 'views/classrooms/:classroomid.html',
         controller: 'ClassroomsClassroomidCtrl',
         resolve: {
@@ -156,6 +174,7 @@ angular
       .when('/classroomsadd', {
         title: 'Add a Classroom',
         icon: 'arrow_back',
+        navBarFunction: 'navBackClassrooms()',
         templateUrl: 'views/classroomsAdd.html',
         controller: 'ClassroomsAddCtrl',
         resolve: {
@@ -164,7 +183,8 @@ angular
       })
       .when('/articles', {
 	      title: 'Articles',   
-        icon: 'menu',     
+        icon: 'menu',    
+        navBarFunction: 'toggleLeft()', 
 	      templateUrl: 'views/articles.html',
         controller: 'ArticlesCtrl',
         resolve: {
@@ -174,6 +194,7 @@ angular
       .when('/articles/:articleId', {
         title: 'articles.title',
         icon: 'arrow_back',
+        navBarFunction: 'navBackArticles()',
         templateUrl: 'views/articles/:articleid.html',
         controller: 'ArticlesArticleidCtrl',
         resolve: {
@@ -183,6 +204,7 @@ angular
       .when('/articlesadd', {
         title: 'Add an Article',
         icon: 'arrow_back',
+        navBarFunction: 'navBackArticles()',
         templateUrl: 'views/articlesAdd.html',
         controller: 'ArticlesAddCtrl',
         resolve: {
